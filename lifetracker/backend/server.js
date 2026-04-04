@@ -14,20 +14,36 @@ const userRoutes = require('./routes/users');
 
 const app = express();
 
+// Trust proxy (required for Render)
+app.set('trust proxy', 1);
+
 // Connect MongoDB
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB error:', err));
 
-// CORS
+// CORS - must be before session
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  'http://localhost:3000'
+].filter(Boolean);
+
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:3000',
-  credentials: true
+  origin: function(origin, callback) {
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
 app.use(express.json());
 
-// Session - 24 hour session
+// Session - 24 hour session, cross-site safe
 app.use(session({
   secret: process.env.SESSION_SECRET || 'lifetracker_secret_key',
   resave: false,
@@ -36,8 +52,8 @@ app.use(session({
   cookie: {
     maxAge: 24 * 60 * 60 * 1000, // 24 hours
     httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax'
+    secure: true,       // always true (Render uses HTTPS)
+    sameSite: 'none'    // required for cross-site cookies
   }
 }));
 
