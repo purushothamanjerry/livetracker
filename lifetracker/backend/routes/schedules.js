@@ -4,17 +4,13 @@ const { requireAuth } = require('../middleware/auth');
 
 router.use(requireAuth);
 
-// Get schedules for a date range (default: today + next 7 days)
 router.get('/', async (req, res) => {
   try {
     const { start, end, date } = req.query;
     let query = { user: req.session.userId };
     if (date) query.date = date;
     else if (start && end) query.date = { $gte: start, $lte: end };
-    else {
-      const today = new Date().toISOString().split('T')[0];
-      query.date = { $gte: today };
-    }
+    else { const today = new Date().toISOString().split('T')[0]; query.date = { $gte: today }; }
     const schedules = await Schedule.find(query).sort({ date: 1, time: 1 });
     res.json({ schedules });
   } catch (err) { res.status(500).json({ message: err.message }); }

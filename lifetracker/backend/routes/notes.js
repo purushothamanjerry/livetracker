@@ -19,12 +19,8 @@ router.post('/', async (req, res) => {
   try {
     const { date, content, tags, mood } = req.body;
     let note = await DailyNote.findOne({ user: req.session.userId, date });
-    if (note) {
-      Object.assign(note, { content, tags, mood, updatedAt: new Date() });
-      await note.save();
-    } else {
-      note = await DailyNote.create({ user: req.session.userId, date, content, tags, mood });
-    }
+    if (note) { Object.assign(note, { content, tags, mood, updatedAt: new Date() }); await note.save(); }
+    else note = await DailyNote.create({ user: req.session.userId, date, content, tags, mood });
     res.json({ note });
   } catch (err) { res.status(500).json({ message: err.message }); }
 });
