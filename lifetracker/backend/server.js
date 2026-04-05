@@ -11,6 +11,8 @@ const healthRoutes = require('./routes/health');
 const scheduleRoutes = require('./routes/schedules');
 const noteRoutes = require('./routes/notes');
 const userRoutes = require('./routes/users');
+const peopleRoutes = require('./routes/people');
+const expenseRoutes = require('./routes/expenses');
 
 const app = express();
 
@@ -22,7 +24,7 @@ mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log('MongoDB connected'))
   .catch(err => console.error('MongoDB error:', err));
 
-// CORS - must be before session
+// CORS
 const allowedOrigins = [
   process.env.FRONTEND_URL,
   'http://localhost:3000'
@@ -41,19 +43,19 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
 
-app.use(express.json());
+app.use(express.json({ limit: '10mb' })); // 10mb for base64 photos
 
-// Session - 24 hour session, cross-site safe
+// Session - 24 hour, cross-site safe
 app.use(session({
   secret: process.env.SESSION_SECRET || 'lifetracker_secret_key',
   resave: false,
   saveUninitialized: false,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
   cookie: {
-    maxAge: 24 * 60 * 60 * 1000, // 24 hours
+    maxAge: 24 * 60 * 60 * 1000,
     httpOnly: true,
-    secure: true,       // always true (Render uses HTTPS)
-    sameSite: 'none'    // required for cross-site cookies
+    secure: true,
+    sameSite: 'none'
   }
 }));
 
@@ -64,6 +66,8 @@ app.use('/api/health', healthRoutes);
 app.use('/api/schedules', scheduleRoutes);
 app.use('/api/notes', noteRoutes);
 app.use('/api/users', userRoutes);
+app.use('/api/people', peopleRoutes);
+app.use('/api/expenses', expenseRoutes);
 
 app.get('/api/health-check', (req, res) => res.json({ status: 'ok' }));
 

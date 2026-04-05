@@ -8,7 +8,10 @@ import Scheduler from './pages/Scheduler';
 import Notes from './pages/Notes';
 import Admin from './pages/Admin';
 import Login from './pages/Login';
+import Expenses from './pages/Expenses';
+import Relationships from './pages/Relationships';
 import './App.css';
+import './NewFeatures.css';
 
 function Layout() {
   const { user, logout } = useAuth();
@@ -36,12 +39,18 @@ function Layout() {
           <NavLink to="/health" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
             <span>💪</span> Health
           </NavLink>
+          <NavLink to="/expenses" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+            <span>💰</span> Expenses
+          </NavLink>
+          <NavLink to="/relationships" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
+            <span>👥</span> People
+          </NavLink>
           <NavLink to="/notes" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
             <span>📝</span> Notes
           </NavLink>
           {user?.isAdmin && (
             <NavLink to="/admin" className={({ isActive }) => isActive ? 'nav-item active' : 'nav-item'}>
-              <span>👤</span> Users
+              <span>⚙️</span> Users
             </NavLink>
           )}
         </div>
@@ -53,6 +62,8 @@ function Layout() {
           <Route path="/analytics" element={<Analytics />} />
           <Route path="/schedule" element={<Scheduler />} />
           <Route path="/health" element={<Health />} />
+          <Route path="/expenses" element={<Expenses />} />
+          <Route path="/relationships" element={<Relationships />} />
           <Route path="/notes" element={<Notes />} />
           <Route path="/admin" element={<Admin />} />
         </Routes>
@@ -68,24 +79,22 @@ function ProtectedRoute({ children }) {
   return children;
 }
 
+function LoginGate() {
+  const { user, loading } = useAuth();
+  if (loading) return <div className="full-loader">Loading...</div>;
+  if (user) return <Navigate to="/" />;
+  return <Login />;
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <BrowserRouter>
         <Routes>
           <Route path="/login" element={<LoginGate />} />
-          <Route path="/*" element={
-            <ProtectedRoute><Layout /></ProtectedRoute>
-          } />
+          <Route path="/*" element={<ProtectedRoute><Layout /></ProtectedRoute>} />
         </Routes>
       </BrowserRouter>
     </AuthProvider>
   );
-}
-
-function LoginGate() {
-  const { user, loading } = useAuth();
-  if (loading) return <div className="full-loader">Loading...</div>;
-  if (user) return <Navigate to="/" />;
-  return <Login />;
 }
