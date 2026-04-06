@@ -30,7 +30,7 @@ function PLMLogo() {
 
 function Layout() {
   const { user, logout } = useAuth();
-  const isOwner = user?.role === 'owner';
+  const isOwner = user?.role === 'owner' || user?.role === 'admin' || user?.isAdmin === true;
   const perms = user?.permissions || {};
 
   const navItems = [
@@ -95,7 +95,7 @@ function Layout() {
 
 function PermGuard({ perm, children }) {
   const { user } = useAuth();
-  if (user?.role === 'owner') return children;
+  if (user?.role === 'owner' || user?.role === 'admin' || user?.isAdmin === true) return children;
   if (!user?.permissions?.[perm]) {
     return (
       <div className="card" style={{ margin: 24 }}>

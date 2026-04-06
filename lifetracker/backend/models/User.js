@@ -5,8 +5,10 @@ const UserSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true, trim: true },
   email:    { type: String, required: true, unique: true, lowercase: true },
   password: { type: String, required: true },
-  role: { type: String, enum: ['owner', 'guest'], default: 'guest' },
-  status: { type: String, enum: ['pending', 'active', 'blocked', 'rejected'], default: 'pending' },
+  // Support both old isAdmin and new role
+  isAdmin:  { type: Boolean, default: false },
+  role:     { type: String, enum: ['owner', 'guest', 'admin'], default: 'guest' },
+  status:   { type: String, enum: ['pending', 'active', 'blocked', 'rejected'], default: 'pending' },
   requestMessage: { type: String, default: '' },
   requestedAt: { type: Date, default: Date.now },
   approvedAt:  { type: Date },
@@ -24,7 +26,7 @@ const UserSchema = new mongoose.Schema({
   avatarColor: { type: String, default: '#22d3ee' },
   createdAt: { type: Date, default: Date.now },
   updatedAt: { type: Date, default: Date.now },
-});
+}, { strict: false }); // strict:false allows old fields
 
 UserSchema.pre('save', async function(next) {
   if (!this.isModified('password')) return next();

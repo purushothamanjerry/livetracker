@@ -555,3 +555,134 @@ button[type="submit"]:hover { opacity: 0.85; }
   .msf-bond-grid { grid-template-columns: repeat(2, 1fr); }
   .people-grid { grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); }
 }
+
+/* ─── MOBILE COMPLETE FIX ────────────────────────────────────── */
+@media (max-width: 768px) {
+  /* Sidebar becomes bottom nav */
+  .sidebar {
+    width: 100% !important;
+    min-height: auto !important;
+    height: 60px;
+    position: fixed !important;
+    bottom: 0 !important;
+    top: auto !important;
+    left: 0 !important;
+    right: 0 !important;
+    flex-direction: row !important;
+    padding: 0 !important;
+    border-right: none !important;
+    border-top: 1px solid var(--border) !important;
+    z-index: 100;
+    overflow: hidden;
+  }
+  .sidebar-logo, .sidebar-user { display: none !important; }
+  .nav-links {
+    flex-direction: row !important;
+    padding: 0 4px !important;
+    gap: 0 !important;
+    overflow-x: auto !important;
+    flex: 1;
+    align-items: center;
+    justify-content: space-around;
+  }
+  .nav-links::-webkit-scrollbar { display: none; }
+  .nav-item {
+    flex-direction: column !important;
+    font-size: 9px !important;
+    gap: 2px !important;
+    padding: 6px 6px !important;
+    min-width: 50px;
+    white-space: nowrap;
+    border: none !important;
+    background: transparent !important;
+  }
+  .nav-item span { font-size: 18px; }
+  .nav-item.active {
+    background: transparent !important;
+    color: var(--accent) !important;
+    border: none !important;
+  }
+  .logout-btn {
+    margin: 0 4px !important;
+    padding: 6px 8px !important;
+    font-size: 10px !important;
+    white-space: nowrap;
+    height: 50px;
+    border-radius: 0 !important;
+    border: none !important;
+    border-left: 1px solid var(--border) !important;
+    flex-shrink: 0;
+  }
+
+  /* Main content padding above bottom nav */
+  .main-content {
+    margin-left: 0 !important;
+    padding: 16px 12px 80px !important;
+    max-width: 100% !important;
+  }
+
+  /* Cards */
+  .card { padding: 14px; }
+
+  /* Charts */
+  .charts-row { grid-template-columns: 1fr !important; }
+  .stats-summary { flex-direction: column; gap: 8px; }
+  .stat-box { min-width: unset; }
+
+  /* Dashboard */
+  .current-name { font-size: 18px; }
+  .current-icon { font-size: 28px; }
+  .current-actions { flex-direction: column; }
+  .btn-switch, .btn-interrupt { width: 100%; }
+  .date-nav { flex-wrap: wrap; gap: 8px; }
+
+  /* Activity grid */
+  .activity-grid { grid-template-columns: repeat(3, 1fr); }
+
+  /* People grid */
+  .people-grid { grid-template-columns: repeat(2, 1fr) !important; }
+
+  /* Person profile */
+  .pp-two-col { grid-template-columns: 1fr !important; }
+  .pp-quick-stats { flex-direction: row !important; gap: 8px; }
+  .pp-qstat { flex: 1; padding: 10px; }
+  .pp-hero { flex-direction: column; }
+  .pp-hero-left { flex-wrap: wrap; }
+  .pp-name { font-size: 1.4rem; }
+
+  /* Multi step form */
+  .msf-modal { width: 96% !important; max-height: 95vh !important; }
+  .msf-type-grid { grid-template-columns: repeat(3, 1fr); }
+  .msf-bond-grid { grid-template-columns: repeat(2, 1fr) !important; }
+  .msf-row { flex-direction: column; }
+
+  /* Range tabs */
+  .range-tabs { gap: 6px; }
+  .range-tab { padding: 6px 12px; font-size: 12px; }
+
+  /* Expenses */
+  .expenses-header { flex-direction: column; align-items: flex-start; }
+
+  /* Analytics */
+  .activity-row { flex-wrap: wrap; }
+  .activity-name { width: auto; flex: 1; }
+
+  /* Schedule */
+  .task-card { flex-wrap: nowrap; }
+  .form-row { flex-direction: column; }
+  .form-group { min-width: unset !important; }
+
+  /* Auth */
+  .auth-card { margin: 16px; padding: 24px 18px; }
+
+  /* Sidebar date nav special */
+  .date-center { flex-direction: column; gap: 4px; }
+}
+
+/* Extra small phones */
+@media (max-width: 380px) {
+  .nav-item { min-width: 42px; padding: 4px !important; }
+  .nav-item span { font-size: 16px; }
+  .nav-item { font-size: 0 !important; } /* hide text, show only icon */
+  .msf-type-grid { grid-template-columns: repeat(2, 1fr); }
+}
