@@ -147,7 +147,7 @@ export default function Dashboard() {
       {/* Current Activity — only show for today */}
       {isToday && (
         <div className="card current-card">
-          <div className="card-label">NOW</div>
+          <div className="now-label">Now</div>
           {current ? (
             <>
               <div className="current-activity">
