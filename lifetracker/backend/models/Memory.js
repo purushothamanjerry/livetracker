@@ -16,4 +16,5 @@ const MemorySchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Memory', MemorySchema);
+// module.exports = mongoose.model('Memory', MemorySchema);
+module.exports = mongoose.models.Memory || mongoose.model('Memory', MemorySchema);
