@@ -1,35 +1,28 @@
 require('dotenv').config();
-const express = require('express');
-const mongoose = require('mongoose');
-const session = require('express-session');
-const MongoStore = require('connect-mongo');
-const cors = require('cors');
+const express   = require('express');
+const mongoose  = require('mongoose');
+const session   = require('express-session');
+const MongoStore= require('connect-mongo');
+const cors      = require('cors');
 
 const app = express();
 app.set('trust proxy', 1);
 
 mongoose.connect(process.env.MONGO_URI)
-  .then(() => console.log('MongoDB connected'))
-  .catch(err => console.error('MongoDB error:', err));
+  .then(()=>console.log('MongoDB connected'))
+  .catch(err=>console.error('MongoDB error:',err));
 
-const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'].filter(Boolean);
+const allowedOrigins = [process.env.FRONTEND_URL,'http://localhost:3000'].filter(Boolean);
 app.use(cors({
-  origin: (origin, cb) => {
-    if (!origin || allowedOrigins.includes(origin)) cb(null, true);
-    else cb(new Error('Not allowed'));
-  },
-  credentials: true,
-  methods: ['GET','POST','PUT','DELETE','OPTIONS'],
-  allowedHeaders: ['Content-Type','Authorization']
+  origin:(origin,cb)=>{ if(!origin||allowedOrigins.includes(origin))cb(null,true); else cb(new Error('Not allowed')); },
+  credentials:true, methods:['GET','POST','PUT','DELETE','OPTIONS'], allowedHeaders:['Content-Type','Authorization']
 }));
-
-app.use(express.json({ limit: '20mb' })); // larger for base64 photos
-
+app.use(express.json({ limit: '20mb' }));
 app.use(session({
-  secret: process.env.SESSION_SECRET || 'plm_secret_key',
-  resave: false, saveUninitialized: false,
+  secret: process.env.SESSION_SECRET||'plm_secret_key',
+  resave:false, saveUninitialized:false,
   store: MongoStore.create({ mongoUrl: process.env.MONGO_URI }),
-  cookie: { maxAge: 24*60*60*1000, httpOnly: true, secure: true, sameSite: 'none' }
+  cookie:{ maxAge:24*60*60*1000, httpOnly:true, secure:true, sameSite:'none' }
 }));
 
 app.use('/api/auth',       require('./routes/auth'));
@@ -41,8 +34,10 @@ app.use('/api/users',      require('./routes/users'));
 app.use('/api/people',     require('./routes/people'));
 app.use('/api/expenses',   require('./routes/expenses'));
 app.use('/api/memories',   require('./routes/memories'));
+app.use('/api/links',      require('./routes/links'));
+app.use('/api',            require('./routes/skills')); // /api/skills, /api/goals, /api/roadmaps
 
-app.get('/api/health-check', (req, res) => res.json({ status: 'ok' }));
+app.get('/api/health-check',(req,res)=>res.json({status:'ok'}));
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => console.log(`PLM running on port ${PORT}`));
+const PORT = process.env.PORT||5000;
+app.listen(PORT,()=>console.log(`PLM running on port ${PORT}`));
