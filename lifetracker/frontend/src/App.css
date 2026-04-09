@@ -1613,3 +1613,40 @@ button[type="submit"]:active { transform: translateY(0); }
   .nav-item { font-size: 0 !important; min-width: 40px; }
   .msf-type-grid { grid-template-columns: repeat(2, 1fr); }
 }
+
+/* ─── DASHBOARD STATS ROW ────────────────────────────────── */
+.db-stats-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 12px;
+  margin-bottom: 16px;
+}
+.db-stat-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: border-color 0.15s;
+}
+.db-stat-card:hover { border-color: var(--border2); }
+.db-stat-icon { font-size: 22px; flex-shrink: 0; }
+.db-stat-val { font-size: 18px; font-weight: 700; font-family: var(--mono); color: var(--cyan); line-height: 1; }
+.db-stat-lbl { font-size: 10px; color: var(--text3); margin-top: 3px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.7px; }
+
+/* ─── TASK PRIORITY DOTS ─────────────────────────────────── */
+.task-priority-dot { font-size: 10px; }
+.task-priority-dot.priority-high   { color: var(--red); }
+.task-priority-dot.priority-medium { color: var(--yellow); }
+.task-priority-dot.priority-low    { color: var(--green); }
+
+/* ─── ACTIVITIES PAGE ────────────────────────────────────── */
+.activities-page { padding: 28px 32px; max-width: 900px; }
+
+/* ─── MOBILE NAV EXTRA ITEMS ─────────────────────────────── */
+@media (max-width: 768px) {
+  .nav-item { min-width: 44px; }
+  .db-stats-row { grid-template-columns: 1fr 1fr; }
+}

@@ -14,12 +14,17 @@ mongoose.connect(process.env.MONGO_URI)
 
 const allowedOrigins = [process.env.FRONTEND_URL, 'http://localhost:3000'].filter(Boolean);
 app.use(cors({
-  origin: (origin, cb) => { if (!origin || allowedOrigins.includes(origin)) cb(null, true); else cb(new Error('Not allowed')); },
+  origin: (origin, cb) => {
+    if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+    else cb(new Error('Not allowed'));
+  },
   credentials: true,
   methods: ['GET','POST','PUT','DELETE','OPTIONS'],
   allowedHeaders: ['Content-Type','Authorization']
 }));
-app.use(express.json({ limit: '10mb' }));
+
+app.use(express.json({ limit: '20mb' })); // larger for base64 photos
+
 app.use(session({
   secret: process.env.SESSION_SECRET || 'plm_secret_key',
   resave: false, saveUninitialized: false,
@@ -35,6 +40,8 @@ app.use('/api/notes',      require('./routes/notes'));
 app.use('/api/users',      require('./routes/users'));
 app.use('/api/people',     require('./routes/people'));
 app.use('/api/expenses',   require('./routes/expenses'));
+app.use('/api/memories',   require('./routes/memories'));
+
 app.get('/api/health-check', (req, res) => res.json({ status: 'ok' }));
 
 const PORT = process.env.PORT || 5000;
