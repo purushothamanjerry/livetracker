@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import ReactDOM from 'react-dom';
 import api from '../utils/api';
 import { format, formatDistanceToNow } from 'date-fns';
 
@@ -54,7 +55,7 @@ function MemoryForm({ memory, people, onSave, onCancel }) {
     finally { setSaving(false); }
   };
 
-  return (
+  const modal = (
     <div className="mform-overlay">
       <div className="mform-modal">
         <div className="mform-header">
@@ -192,6 +193,7 @@ function MemoryForm({ memory, people, onSave, onCancel }) {
       </div>
     </div>
   );
+  return ReactDOM.createPortal(modal, document.body);
 }
 
 // ── Memory Card ───────────────────────────────────────────────────

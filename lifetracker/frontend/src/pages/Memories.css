@@ -216,10 +216,19 @@
    MEMORY FORM MODAL
 ═══════════════════════════════════════════════════════ */
 .mform-overlay {
-  position: fixed; inset: 0; z-index: 1000;
-  background: rgba(0,0,0,0.82); backdrop-filter: blur(14px);
-  display: flex; align-items: center; justify-content: center; padding: 20px;
+  position: fixed !important;
+  top: 0 !important; left: 0 !important;
+  right: 0 !important; bottom: 0 !important;
+  width: 100vw !important; height: 100vh !important;
+  z-index: 99999 !important;
+  background: rgba(0,0,0,0.85);
+  backdrop-filter: blur(14px);
+  display: flex !important;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
   animation: fadeIn 0.2s ease;
+  overflow: hidden;
 }
 .mform-modal {
   background: var(--surface); border: 1px solid var(--border);
