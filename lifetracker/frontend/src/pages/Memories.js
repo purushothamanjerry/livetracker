@@ -404,7 +404,9 @@ export default function Memories() {
           <h3 style={{ fontSize: 17, fontWeight: 700, marginBottom: 8 }}>{hasFilter ? 'No memories match' : 'No memories yet'}</h3>
           <p style={{ color: 'var(--text2)', fontSize: 13 }}>{hasFilter ? 'Try removing some filters.' : 'Start capturing the moments that matter.'}</p>
           {!hasFilter && (
-            <button className="btn-add" style={{ marginTop: 24 }} onClick={() => { setEditMem(null); setShowForm(true); }}>
+            <button className="btn-add" style={{ marginTop: 24 }} onClick={() => { 
+                 console.log("CLICKED"); 
+              setEditMem(null); setShowForm(true); }}>
               + Capture First Memory
             </button>
           )}
