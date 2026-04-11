@@ -25,4 +25,6 @@ const MemorySchema = new mongoose.Schema({
   updatedAt:   { type: Date, default: Date.now }
 }, { strict: false }); // strict:false allows old fields to pass through
 
-module.exports = mongoose.model('Memory', MemorySchema);
+// module.exports = mongoose.model('Memory', MemorySchema);
+
+module.exports = mongoose.models.Memory || mongoose.model("Memory", MemorySchema);
