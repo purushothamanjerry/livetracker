@@ -115,23 +115,46 @@ router.delete('/memories/:id', async (req, res) => {
 router.get('/birthdays/upcoming', async (req, res) => {
   try {
     const people = await Person.find({ user: req.session.userId, dob: { $ne: '' } });
+
     const today = new Date();
+    today.setHours(0, 0, 0, 0); // 🔥 FIX
+
     const upcoming = [];
+
     people.forEach(p => {
       if (!p.dob) return;
+
       const dobParts = p.dob.split('-');
       if (dobParts.length < 2) return;
+
       const month = parseInt(dobParts[1]) - 1;
       const day = parseInt(dobParts[2]);
+
       const thisYear = new Date(today.getFullYear(), month, day);
       const nextYear = new Date(today.getFullYear() + 1, month, day);
-      const target = thisYear >= today ? thisYear : nextYear;
-      const daysUntil = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
-      if (daysUntil <= 30) upcoming.push({ person: p, daysUntil, date: target.toISOString().split('T')[0] });
-    });
-    upcoming.sort((a, b) => a.daysUntil - b.daysUntil);
-    res.json({ upcoming });
-  } catch (err) { res.status(500).json({ message: err.message }); }
-});
 
+      thisYear.setHours(0,0,0,0);  // 🔥 FIX
+      nextYear.setHours(0,0,0,0);  // 🔥 FIX
+
+      const target = thisYear >= today ? thisYear : nextYear;
+
+      const daysUntil = Math.ceil((target - today) / (1000 * 60 * 60 * 24));
+
+      if (daysUntil <= 30) {
+        upcoming.push({
+          person: p,
+          daysUntil,
+          date: target.toISOString().split('T')[0]
+        });
+      }
+    });
+
+    upcoming.sort((a, b) => a.daysUntil - b.daysUntil);
+
+    res.json({ upcoming });
+
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
 module.exports = router;
